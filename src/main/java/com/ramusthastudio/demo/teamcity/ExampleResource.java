@@ -13,6 +13,7 @@ import java.time.Duration;
 public class ExampleResource {
 
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
     public Uni<Integer> hello() {
         return Uni.createFrom()
                 .item(() -> new SecureRandom().nextInt(1000))
