@@ -1,6 +1,7 @@
 package com.ramusthastudio.demo.teamcity;
 
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import org.jboss.resteasy.reactive.RestSseElementType;
 
 import javax.ws.rs.GET;
@@ -10,14 +11,22 @@ import javax.ws.rs.core.MediaType;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@Path("/stream")
+@Path("/api")
 public class ExampleResource {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestSseElementType(MediaType.APPLICATION_JSON)
-    public Multi<String> hello() {
+    @Path("/stream")
+    public Multi<String> stream() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
                 .onItem().transform(n -> String.format("Date %s", LocalDateTime.now()));
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/data")
+    public Uni<String> data() {
+        return Uni.createFrom().item(() -> String.format("Data from %s", LocalDateTime.now()));
     }
 }
