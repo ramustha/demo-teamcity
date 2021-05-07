@@ -23,9 +23,13 @@ public class ExampleResource {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
                 .onItem().transform(n -> {
                     try {
-                        return String.format("Data from %s", InetAddress.getLocalHost().getHostName());
+                        return String.format("Data from %s %s %s"
+                                , InetAddress.getLocalHost().getHostName()
+                                , LocalDateTime.now()
+                                , System.getenv()
+                        );
                     } catch (Exception e) {
-                        return String.format("Data from %s", System.getenv());
+                        return String.format("Error from %s", e.getMessage());
                     }
                 });
     }
@@ -36,9 +40,13 @@ public class ExampleResource {
     public Uni<String> data() {
         return Uni.createFrom().item(() -> {
             try {
-                return String.format("Data from %s", InetAddress.getLocalHost().getHostName());
+                return String.format("Data from %s %s %s"
+                        , InetAddress.getLocalHost().getHostName()
+                        , LocalDateTime.now()
+                        , System.getenv()
+                );
             } catch (Exception e) {
-                return String.format("Data from %s", System.getenv());
+                return String.format("Error from %s", e.getMessage());
             }
         });
     }
