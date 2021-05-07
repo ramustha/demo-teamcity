@@ -21,7 +21,13 @@ public class ExampleResource {
     @Path("/stream")
     public Multi<String> stream() {
         return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-                .onItem().transform(n -> String.format("Date %s", LocalDateTime.now()));
+                .onItem().transform(n -> {
+                    try {
+                        return String.format("Data from %s", InetAddress.getLocalHost().getHostName());
+                    } catch (Exception e) {
+                        return String.format("Data from %s", System.getenv());
+                    }
+                });
     }
 
     @GET
