@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.net.InetAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -27,6 +28,12 @@ public class ExampleResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/data")
     public Uni<String> data() {
-        return Uni.createFrom().item(() -> String.format("Data from %s", LocalDateTime.now()));
+        return Uni.createFrom().item(() -> {
+            try {
+                return String.format("Data from %s", InetAddress.getLocalHost().getHostName());
+            } catch (Exception e) {
+                return String.format("Data from %s", System.getenv());
+            }
+        });
     }
 }
